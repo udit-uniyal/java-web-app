@@ -4,11 +4,13 @@ pipeline {
   }
   stages {
     stage('Build') {
+      agent any
       steps {
         sh 'docker build -t darinpope/java-web-app:latest .'
       }
     }
     stage('Scan') {
+      agent any
       steps {
         sh 'trivy darinpope/java-web-app:latest'
       }
