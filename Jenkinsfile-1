@@ -12,7 +12,7 @@ pipeline {
     stage('Scan') {
       steps {
         dir ('/var/lib/jenkins/workspace/Java-web-app-container-scan') {
-          sh 'trivy image darinpope/java-web-app:latest -f json java-web-app:1 -o results.json --quiet'
+          sh 'trivy image darinpope/java-web-app:latest -f json -f json udit-uniyal/java-web-app:1234 -o results.json --quiet'
          }
       }
     }
