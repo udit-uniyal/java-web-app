@@ -5,13 +5,11 @@ pipeline {
   }
   stages {
     stage('Build') {
-      agent any
       steps {
         sh 'docker build -t darinpope/java-web-app:latest .'
       }
     }
     stage('Scan') {
-      agent any
       steps {
         sh 'trivy image darinpope/java-web-app:latest'
       }
