@@ -13,7 +13,7 @@ pipeline {
     stage('Scan') {
       agent any
       steps {
-        sh 'trivy darinpope/java-web-app:latest'
+        sh 'trivy image darinpope/java-web-app:latest'
       }
     }
   }
