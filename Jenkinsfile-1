@@ -9,23 +9,25 @@ pipeline {
         sh 'docker build -t darinpope/java-web-app:latest .'
       }
     }
-    stage('Scan') {
-      steps {
-        dir ('/var/lib/jenkins/workspace/Java-web-app-container-scan') {
-          sh 'trivy image darinpope/java-web-app:latest -f json -o results.json --quiet'
-         }
-      }
+stage('Install and run Container Scan') {
+    steps {
+      dir ('/var/lib/jenkins/workspace/Java-web-app-container-scan') {
+        script {
+            sh 'docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v aquasec/trivy:latest --quiet image darinpope/java-web-app:latest -f json -o results.json'
+        }
     }
-    stage('Send result to AccuKnox') {
-      steps {
+ }
+}
+stage('Send result to AccuKnox') {
+    steps {
         dir ('/var/lib/jenkins/workspace/Java-web-app-container-scan') {
-            sh '''curl --location --request POST 'https://cspm.demo.accuknox.com/api/v1/artifact/?tenant_id=11&data_type=TR&save_to_s3=false' \
-            --header 'Tenant-Id: 11' \
-            --header 'Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzE1NzYwNjAzLCJqdGkiOiI2YzY1YTJiNTYzYzg0ZjdmOGU4NWExN2RkMzk2OTNjOCIsImlzcyI6ImNzcG0uZGVtby5hY2N1a25veC5jb20ifQ.fQtZZkdlphkLMdRs2BZrc4uN7JOYRNhLQAJ98S0KCeeKJLoy0MrmzJDmgAXtMBDVJKJl7Rx5adsZTP1gzjMtmffXf881X50LaJFrZEpbCwiOV2UzcPPVyYwhYxo51QnT46gb-wOFvO7Kr3GCfpsaqWKNAb2L0KlEb7Fd2riAS7cFdMv93zOeemWCrwhiDnYGSbPI5uqJCkiRbbH5edzGGAB_XfG9pcLeXep84SubdPBxmHV501SEu3H-qejGshlv8wEbeIobgyGP8b2ZJJkWNqhtC7Ki8P4xTf9JSh6TDZGV-_rWo0IkWhF-FWh9bySFy3sc2yyX2tFyFFkkYb3Ibw' \
+            sh '''curl --location --request POST 'https://cspm.demo.accuknox.com/api/v1/artifact/?tenant_id=<tenantID>&data_type=TR&save_to_s3=false' \
+            --header 'Tenant-Id: <tenantID>' \
+            --header 'Authorization: Bearer <Token>' \
             --form 'file=@"./results.json"'
             '''        
         }
-      }
     }
   }
+ }
 }
