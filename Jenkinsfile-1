@@ -11,7 +11,7 @@ pipeline {
     }
 stage('Install and run Container Scan') {
     steps {
-      dir ('/var/lib/jenkins/workspace/Accuknox-Container-Scan-pipeline'') {
+      dir ('/var/lib/jenkins/workspace/Accuknox-Container-Scan-pipeline') {
         script {
             sh 'docker run --rm -v /var/run/docker.sock:/var/run/docker.sock aquasec/trivy:latest --quiet image darinpope/java-web-app:latest -f json -o results.json'
         }
