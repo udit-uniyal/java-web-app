@@ -11,7 +11,7 @@ pipeline {
     }
 stage('Install and run Container Scan') {
     steps {
-      dir ('/var/lib/jenkins/workspace/Java-web-app-container-scan') {
+      dir ('/var/lib/jenkins/workspace/Accuknox-Container-Scan-pipeline'') {
         script {
             sh 'docker run --rm -v /var/run/docker.sock:/var/run/docker.sock aquasec/trivy:latest --quiet image darinpope/java-web-app:latest -f json -o results.json'
         }
@@ -20,7 +20,7 @@ stage('Install and run Container Scan') {
 }
 stage('Send result to AccuKnox') {
     steps {
-        dir ('/var/lib/jenkins/workspace/Java-web-app-container-scan') {
+        dir ('/var/lib/jenkins/workspace/Accuknox-Container-Scan-pipeline') {
             sh '''curl --location --request POST 'https://cspm.demo.accuknox.com/api/v1/artifact/?tenant_id=167&data_type=TR&save_to_s3=false' \
             --header 'Tenant-Id: 167' \
             --header 'Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzE4MjU1Njg4LCJqdGkiOiJmMjFiMTM3MmIyMzg0NjgxODZmMTcxMjQ4OTE0MzRhNCIsImlzcyI6ImNzcG0uZGVtby5hY2N1a25veC5jb20ifQ.VYHjrynSYWUzbv4951OlNks5ROFMgcph6qlth2dgcYbLk0kXJcXwWQmotTQAei5EGy0Zb3e_nO4vL3Jxlpuksl-JqGflW67u2GcN1nTigqWmSD2E6POHF5_XcmSnMcqyYlPpJXSceWzRedgGqmO-cxpv1wdlz8Vk94DMle8N0hWeKBqTFKJo5Psdj1dLpcGpSQOmHFZxNGdiLz3i30guKGS1D3NZbHHdw6EumF7GG0_x9LIDEOEjIbhAd5DAkxPS_b6LXDp0mfrqE3etNSwzO1dlWhTqfrnPNmWl0LEu8FaTGZpGPZWjOnI_q5dlxyW2TewV3ja_PmbPNwQebjNuxA' \
